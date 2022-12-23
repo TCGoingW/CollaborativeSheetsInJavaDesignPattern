@@ -10,8 +10,7 @@ public class Sheet implements Subject {
 	
 	final State read = new readOnly(this);
 	final State edit = new editable(this);
-
-	// constructor to set sheet name
+	
 	public Sheet(String sheetName)
 	{
 		this.name = sheetName;
@@ -32,5 +31,14 @@ public class Sheet implements Subject {
     @Override
     public void add(String userName, User user) {
         userList.put(userName, user);
+    }
+    
+    @Override
+    public void notifyUser(double[][] arr)
+    {
+    	for(String i: userList.keySet())
+    	{
+    		userList.get(i).update(arr);
+    	}
     }
 }

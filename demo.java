@@ -3,8 +3,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 
-
-//limited 只能一個運算元、運算員跟數字要黏一起
+//limited 只能一個運算元，運算員跟數字要黏一起，可以共同編輯但有各自edit模式
 
 public class demo {
     public static void main(String[] args){
@@ -12,6 +11,7 @@ public class demo {
     	String userName, sheetName;
     	String junk;
     	
+    	// store users in main
     	HashMap<String, User> users = new HashMap<String, User>();
     	
     	while(true)
@@ -29,23 +29,24 @@ public class demo {
     		int commandNum = scanner.nextInt();
     		if(commandNum == 1)// create user
     		{   			
-    			userName = scanner.next().replace(" ", "");
+    			userName = scanner.next();
     			// create user object
     			User user = new User();
     			user.setName(userName);
+    			// store user in users in main hashMap
     			users.put(userName, user);
     			
     			System.out.println("Create a user named \"" + user.name + "\".");
     		}
     		else if(commandNum == 2)// create sheet
     		{
-    			userName = scanner.next().replace(" ", "");
-    			sheetName = scanner.next().replace(" ", "");
+    			userName = scanner.next();
+    			sheetName = scanner.next();
     			// check the user exist in local main hashMap
     			if(users.get(userName).name.equals(userName))
     			{
     				//found the direct user to createSheet
-    				users.get(userName).createSheet(userName, sheetName);
+    				users.get(userName).createSheet(sheetName);
     			}
     			else
     			{
@@ -56,11 +57,12 @@ public class demo {
     		}
     		else if(commandNum == 3)// check sheet
     		{
-    			userName = scanner.next().replace(" ", "");
-    			sheetName = scanner.next().replace(" ", "");
+    			userName = scanner.next();
+    			sheetName = scanner.next();
     			// check the user exist in local main hashMap
     			if(users.get(userName).name.equals(userName))
     			{
+    				// check the sheet exist in user
     				if(users.get(userName).sheet.name.equals(sheetName))
     					users.get(userName).sheet.state.printSheet();
     				else
@@ -74,8 +76,8 @@ public class demo {
     		}
     		else if(commandNum == 4)// edit a value in sheet
     		{
-    			userName = scanner.next().replace(" ", "");
-    			sheetName = scanner.next().replace(" ", "");
+    			userName = scanner.next();
+    			sheetName = scanner.next();
     			
     			// check the user exist in local main hashMap
     			if(users.get(userName).name.equals(userName))
@@ -92,6 +94,7 @@ public class demo {
     				int t = 0;
     				while(st.hasMoreTokens())
     					editSplitString[t++] = st.nextToken();
+    				// put split string into edit function
     				users.get(userName).editSheet(userName, sheetName, editSplitString);
     			}
     			else
@@ -102,11 +105,13 @@ public class demo {
     		}
     		else if(commandNum == 5) // change sheet permission
     		{
-    			userName = scanner.next().replace(" ", "");
-    			sheetName = scanner.next().replace(" ", "");
-    			String sheetPermission = scanner.next().replace(" ", "");
+    			userName = scanner.next();
+    			sheetName = scanner.next();
+    			// read permission mode
+    			String sheetPermission = scanner.next();
+    			// check the user exist in local main storage
     			if(users.get(userName).name.equals(userName))
-    			{
+    			{	// change the sheet state a.k.a permission
     				users.get(userName).sheet.setState(sheetPermission);
     			}
     			else
@@ -117,18 +122,25 @@ public class demo {
     		}
     		else if(commandNum == 6)
     		{
-    			userName = scanner.next().replace(" ", "");
-    			sheetName = scanner.next().replace(" ", "");
+    			userName = scanner.next();
+    			sheetName = scanner.next();
+    			// create new user
     			User newUser = new User();
-    			newUser.setName(scanner.next().replace(" ", ""));
-    			newUser.sheet = users.get(userName).sheet;
+    			// set user
+    			newUser.setName(scanner.next());
+    			// set sheet
+    			newUser.setSheet(sheetName);
+    			// duplicate sheet array
+    			newUser.sheet.array = users.get(userName).sheet.array;
+    			// store user in users in main hashMap
     			users.put(newUser.name, newUser);
+    			// add sheet's user list
     			users.get(userName).sheet.add(newUser.name, newUser);
     			System.out.println("Share \"" + userName  + "\"'s \"" + sheetName + "\" with \"" + newUser.name + "\" .");
     		}
     		else
     		{
-    			System.out.println("Unexpected command.\n");
+    			System.out.println("Unexpected command.");
     		}
     	}
     }

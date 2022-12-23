@@ -16,6 +16,7 @@ public class editable implements State{
 	@Override
 	public void editSheet(String userName, String sheetName, String[] editSplitString)
 	{
+		Sheet notifySheet = this.sheet;
 		double[] editSplitDouble = new double[3];
 		double sum = 0;
 		editSplitDouble[0] = Double.parseDouble(editSplitString[0]);
@@ -50,10 +51,12 @@ public class editable implements State{
 			editSplitDouble[2] = sum;
 		}
 		else
-		{
+		{ 
 			editSplitDouble[2] = Double.parseDouble(editSplitString[2]);
 		}
-		sheet.array[(int)editSplitDouble[0]][(int)editSplitDouble[1]] = editSplitDouble[2];
+		notifySheet.array[(int)editSplitDouble[0]][(int)editSplitDouble[1]] = editSplitDouble[2];
+		notifySheet.notifyUser(notifySheet.array);
+		//sheet.array[(int)editSplitDouble[0]][(int)editSplitDouble[1]] = editSplitDouble[2];
 		this.printSheet();
 	}
 
